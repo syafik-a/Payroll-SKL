@@ -40,8 +40,8 @@ class AbsensiController extends Controller
         }
 
 
-        // return redirect()->back()->with('success', 'Presensi masuk berhasil.');
-        return response()->json(['message' => 'Presensi masuk berhasil.', 'data' => $absensiHariIni]);
+        return redirect()->back()->with('success', 'Presensi masuk berhasil.');
+        // return response()->json(['message' => 'Presensi masuk berhasil.', 'data' => $absensiHariIni]);
     }
 
     public function presensiPulang(Request $request)
@@ -67,8 +67,8 @@ class AbsensiController extends Controller
         $absensiHariIni->jam_pulang = Carbon::now()->format('H:i:s');
         $absensiHariIni->save();
 
-        // return redirect()->back()->with('success', 'Presensi pulang berhasil.');
-        return response()->json(['message' => 'Presensi pulang berhasil.', 'data' => $absensiHariIni]);
+        return redirect()->back()->with('success', 'Presensi pulang berhasil.');
+        // return response()->json(['message' => 'Presensi pulang berhasil.', 'data' => $absensiHariIni]);
     }
 
     public function riwayatAbsensi()
@@ -81,7 +81,7 @@ class AbsensiController extends Controller
                         ->orderBy('tanggal', 'desc')
                         ->paginate(10); // atau get()
 
-        // return view('karyawan.absensi.riwayat', compact('riwayat'));
-        return response()->json(['message' => 'Riwayat Absensi Karyawan', 'data' => $riwayat]);
+        return view('karyawan.absensi.riwayat', compact('riwayat'));
+        // return response()->json(['message' => 'Riwayat Absensi Karyawan', 'data' => $riwayat]);
     }
 }
