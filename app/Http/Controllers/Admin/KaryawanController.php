@@ -15,13 +15,11 @@ class KaryawanController extends Controller
     {
         $karyawans = Karyawan::with('user')->latest()->paginate(10);
         return view('admin.karyawan.index', compact('karyawans'));
-        // return response()->json($karyawans);
     }
 
     public function create()
     {
         return view('admin.karyawan.create');
-        // return response()->json(['message' => 'Show form to create karyawan']);
     }
 
     public function store(Request $request)
@@ -56,27 +54,23 @@ class KaryawanController extends Controller
                 'gaji_pokok' => $request->gaji_pokok,
             ]);
             DB::commit();
-            // return redirect()->route('admin.karyawan.index')->with('success', 'Karyawan berhasil ditambahkan.');
-            return response()->json(['message' => 'Karyawan berhasil ditambahkan.', 'data' => $karyawan->load('user')], 201);
+            return redirect()->route('admin.karyawan.index')->with('success', 'Karyawan berhasil ditambahkan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            // return back()->withInput()->with('error', 'Gagal menambahkan karyawan: ' . $e->getMessage());
-             return response()->json(['message' => 'Gagal menambahkan karyawan', 'error' => $e->getMessage()], 500);
+            return back()->withInput()->with('error', 'Gagal menambahkan karyawan: ' . $e->getMessage());
         }
     }
 
     public function show(Karyawan $karyawan)
     {
         $karyawan->load('user');
-        // return view('admin.karyawan.show', compact('karyawan'));
-        return response()->json($karyawan);
+        return view('admin.karyawan.show', compact('karyawan'));
     }
 
     public function edit(Karyawan $karyawan)
     {
         $karyawan->load('user');
-        // return view('admin.karyawan.edit', compact('karyawan'));
-        return response()->json($karyawan);
+        return view('admin.karyawan.edit', compact('karyawan'));
     }
 
     public function update(Request $request, Karyawan $karyawan)
@@ -85,7 +79,7 @@ class KaryawanController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed', // Password optional
+            'password' => 'nullable|string|min:8|confirmed',
             'nik' => 'required|string|max:20|unique:karyawan,nik,' . $karyawan->id,
             'alamat' => 'nullable|string',
             'no_telepon' => 'nullable|string|max:15',
@@ -114,12 +108,10 @@ class KaryawanController extends Controller
                 'gaji_pokok' => $request->gaji_pokok,
             ]);
             DB::commit();
-            // return redirect()->route('admin.karyawan.index')->with('success', 'Data karyawan berhasil diperbarui.');
-            return response()->json(['message' => 'Data karyawan berhasil diperbarui.', 'data' => $karyawan->load('user')]);
+            return redirect()->route('admin.karyawan.index')->with('success', 'Data karyawan berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
-            // return back()->withInput()->with('error', 'Gagal memperbarui data karyawan: ' . $e->getMessage());
-            return response()->json(['message' => 'Gagal memperbarui data karyawan', 'error' => $e->getMessage()], 500);
+            return back()->withInput()->with('error', 'Gagal memperbarui data karyawan: ' . $e->getMessage());
         }
     }
 
@@ -127,19 +119,12 @@ class KaryawanController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Hapus User terkait juga
-            $karyawan->user()->delete(); // Ini akan cascade delete karyawan jika onDelete cascade di FK user_id
-            // Jika tidak ada cascade, atau ingin lebih eksplisit:
-            // $user = $karyawan->user;
-            // $karyawan->delete();
-            // if ($user) $user->delete();
+            $karyawan->user()->delete();
             DB::commit();
-            // return redirect()->route('admin.karyawan.index')->with('success', 'Karyawan berhasil dihapus.');
-            return response()->json(['message' => 'Karyawan berhasil dihapus.']);
+            return redirect()->route('admin.karyawan.index')->with('success', 'Karyawan berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollBack();
-            // return back()->with('error', 'Gagal menghapus karyawan: ' . $e->getMessage());
-            return response()->json(['message' => 'Gagal menghapus karyawan.', 'error' => $e->getMessage()], 500);
+            return back()->with('error', 'Gagal menghapus karyawan: ' . $e->getMessage());
         }
     }
 }

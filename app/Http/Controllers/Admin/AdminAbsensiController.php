@@ -7,7 +7,7 @@ use App\Models\Absensi;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class AdminAbsensiController extends Controller // Nama kelas diperbaiki
+class AdminAbsensiController extends Controller
 {
     public function rekapAbsensi(Request $request)
     {
@@ -19,16 +19,14 @@ class AdminAbsensiController extends Controller // Nama kelas diperbaiki
                         ->whereYear('tanggal', $tahun)
                         ->orderBy('tanggal', 'desc')
                         ->orderBy('karyawan_id')
-                        ->paginate(20); // atau get()
+                        ->paginate(20);
 
         return view('admin.absensi.rekap', compact('absensi', 'bulan', 'tahun'));
-        // return response()->json(['data' => $absensi, 'bulan' => $bulan, 'tahun' => $tahun]);
     }
-     // Admin juga bisa mengelola absensi (misal ada yg lupa absen)
+
     public function edit(Absensi $absensi)
     {
-        // return view('admin.absensi.edit', compact('absensi'));
-         return response()->json($absensi->load('karyawan.user'));
+        return view('admin.absensi.edit', compact('absensi'));
     }
 
     public function update(Request $request, Absensi $absensi)
@@ -44,6 +42,5 @@ class AdminAbsensiController extends Controller // Nama kelas diperbaiki
         $absensi->update($request->all());
 
         return redirect()->route('admin.absensi.rekap')->with('success', 'Data absensi berhasil diperbarui.');
-        // return response()->json(['message' => 'Data absensi berhasil diperbarui.', 'data' => $absensi]);
     }
 }

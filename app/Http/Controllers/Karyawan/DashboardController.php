@@ -11,7 +11,6 @@ class DashboardController extends Controller
     public function index()
     {
         $karyawan = Auth::user()->karyawan;
-        // return view('karyawan.dashboard', compact('karyawan'));
-        return response()->json(['message' => 'Karyawan Dashboard', 'karyawan' => $karyawan]);
+        return view('karyawan.dashboard', compact('karyawan'));
     }
 }

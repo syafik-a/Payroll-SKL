@@ -13,7 +13,11 @@ class AdminMiddleware
         if (Auth::check() && Auth::user()->isAdmin()) {
             return $next($request);
         }
-        // abort(403, 'Unauthorized action.');
-        return response()->json(['message' => 'Unauthorized action. Admin access required.'], 403);
+        
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Unauthorized action. Admin access required.'], 403);
+        }
+        
+        abort(403, 'Unauthorized action.');
     }
 }

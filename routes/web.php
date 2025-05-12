@@ -44,7 +44,7 @@ Route::middleware(['auth', 'karyawan'])->prefix('karyawan')->name('karyawan.')->
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    // CRUD Karyawan
+    // CRUD Karyawan - Perhatikan ini menggunakan AdminKaryawanController
     Route::resource('karyawan', AdminKaryawanController::class);
 
     // Absensi Admin

@@ -13,7 +13,11 @@ class KaryawanMiddleware
         if (Auth::check() && Auth::user()->isKaryawan()) {
             return $next($request);
         }
-        // abort(403, 'Unauthorized action.');
-        return response()->json(['message' => 'Unauthorized action. Karyawan access required.'], 403);
+        
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Unauthorized action. Karyawan access required.'], 403);
+        }
+        
+        abort(403, 'Unauthorized action.');
     }
 }
