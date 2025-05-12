@@ -10,8 +10,11 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        // return view('auth.login'); // Tampilkan form login
-        return response()->json(['message' => 'Please login (form view not implemented yet)']);
+        if (request()->expectsJson()) {
+            return response()->json(['message' => 'Please login']);
+        }
+        
+        return view('auth.login'); // Return view untuk web
     }
 
     public function login(Request $request)
@@ -22,15 +25,32 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            if ($request->expectsJson()) {
+                $user = Auth::user();
+                $token = $user->createToken('auth-token')->plainTextToken; // Untuk API
+                
+                return response()->json([
+                    'message' => 'Login successful',
+                    'user' => $user,
+                    'token' => $token,
+                    'redirect_to' => $user->isAdmin() ? '/admin/dashboard' : '/karyawan/dashboard'
+                ]);
+            }
+            
             $request->session()->regenerate();
             $user = Auth::user();
+            
             if ($user->isAdmin()) {
-                // return redirect()->intended('/admin/dashboard');
-                return response()->json(['message' => 'Admin Logged In', 'user' => $user, 'redirect_to' => '/admin/dashboard']);
+                return redirect()->intended('/admin/dashboard');
             } elseif ($user->isKaryawan()) {
-                // return redirect()->intended('/karyawan/dashboard');
-                return response()->json(['message' => 'Karyawan Logged In', 'user' => $user, 'redirect_to' => '/karyawan/dashboard']);
+                return redirect()->intended('/karyawan/dashboard');
             }
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'The provided credentials do not match our records.'
+            ], 401);
         }
 
         return back()->withErrors([
@@ -40,10 +60,16 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        if ($request->expectsJson()) {
+            $request->user()->currentAccessToken()->delete();
+            
+            return response()->json(['message' => 'Logged out successfully']);
+        }
+        
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        // return redirect('/');
-        return response()->json(['message' => 'Logged out']);
+        
+        return redirect('/');
     }
 }
