@@ -6,18 +6,31 @@ use App\Http\Controllers\Karyawan\DashboardController as KaryawanDashboardContro
 use App\Http\Controllers\Karyawan\AbsensiController as KaryawanAbsensiController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\KaryawanController as AdminKaryawanController;
-use App\Http\Controllers\Admin\AdminAbsensiController; // Sesuaikan dengan nama kelas
-use App\Http\Controllers\Admin\AdminGajiController; // Sesuaikan dengan nama kelas
+use App\Http\Controllers\Admin\AdminAbsensiController;
+use App\Http\Controllers\Admin\AdminGajiController;
 
-// Route untuk halaman login
+// Route untuk halaman utama
 Route::get('/', function () {
-    return redirect()->route('login.form');
+    if (Auth::check()) {
+        if (Auth::user()->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        } elseif (Auth::user()->isKaryawan()) {
+            return redirect()->route('karyawan.dashboard');
+        }
+    }
+    return redirect()->route('login');
+});
+
+// Guest Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
 });
 
 // Auth Routes
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');
-Route::post('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
 
 // Karyawan Routes
 Route::middleware(['auth', 'karyawan'])->prefix('karyawan')->name('karyawan.')->group(function () {

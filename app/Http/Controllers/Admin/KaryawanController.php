@@ -14,14 +14,14 @@ class KaryawanController extends Controller
     public function index()
     {
         $karyawans = Karyawan::with('user')->latest()->paginate(10);
-        // return view('admin.karyawan.index', compact('karyawans'));
-        return response()->json($karyawans);
+        return view('admin.karyawan.index', compact('karyawans'));
+        // return response()->json($karyawans);
     }
 
     public function create()
     {
-        // return view('admin.karyawan.create');
-        return response()->json(['message' => 'Show form to create karyawan']);
+        return view('admin.karyawan.create');
+        // return response()->json(['message' => 'Show form to create karyawan']);
     }
 
     public function store(Request $request)

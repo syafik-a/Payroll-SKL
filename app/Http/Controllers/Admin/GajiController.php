@@ -26,8 +26,8 @@ class AdminGajiController extends Controller // Nama kelas diperbaiki
                     ->orderBy('karyawan_id')
                     ->paginate(15);
         
-        // return view('admin.gaji.index', compact('gajis', 'bulan', 'tahun'));
-        return response()->json(['data' => $gajis, 'bulan' => $bulan, 'tahun' => $tahun]);
+        return view('admin.gaji.index', compact('gajis', 'bulan', 'tahun'));
+        // return response()->json(['data' => $gajis, 'bulan' => $bulan, 'tahun' => $tahun]);
     }
 
 
@@ -86,8 +86,8 @@ class AdminGajiController extends Controller // Nama kelas diperbaiki
                 );
             }
             DB::commit();
-            // return redirect()->route('admin.gaji.index', ['bulan' => $bulan, 'tahun' => $tahun])->with('success', 'Perhitungan gaji berhasil diproses.');
-             return response()->json(['message' => 'Perhitungan gaji berhasil diproses.']);
+            return redirect()->route('admin.gaji.index', ['bulan' => $bulan, 'tahun' => $tahun])->with('success', 'Perhitungan gaji berhasil diproses.');
+            // return response()->json(['message' => 'Perhitungan gaji berhasil diproses.']);
         } catch (\Exception $e) {
             DB::rollBack();
             // return back()->with('error', 'Gagal memproses gaji: ' . $e->getMessage());

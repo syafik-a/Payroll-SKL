@@ -21,8 +21,8 @@ class AdminAbsensiController extends Controller // Nama kelas diperbaiki
                         ->orderBy('karyawan_id')
                         ->paginate(20); // atau get()
 
-        // return view('admin.absensi.rekap', compact('absensi', 'bulan', 'tahun'));
-        return response()->json(['data' => $absensi, 'bulan' => $bulan, 'tahun' => $tahun]);
+        return view('admin.absensi.rekap', compact('absensi', 'bulan', 'tahun'));
+        // return response()->json(['data' => $absensi, 'bulan' => $bulan, 'tahun' => $tahun]);
     }
      // Admin juga bisa mengelola absensi (misal ada yg lupa absen)
     public function edit(Absensi $absensi)
@@ -43,7 +43,7 @@ class AdminAbsensiController extends Controller // Nama kelas diperbaiki
 
         $absensi->update($request->all());
 
-        // return redirect()->route('admin.absensi.rekap')->with('success', 'Data absensi berhasil diperbarui.');
-        return response()->json(['message' => 'Data absensi berhasil diperbarui.', 'data' => $absensi]);
+        return redirect()->route('admin.absensi.rekap')->with('success', 'Data absensi berhasil diperbarui.');
+        // return response()->json(['message' => 'Data absensi berhasil diperbarui.', 'data' => $absensi]);
     }
 }
