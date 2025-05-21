@@ -4,90 +4,93 @@
 
 @section('content')
 <div class="mb-4">
-    <h1><i class="fas fa-calendar-check"></i> Rekap Absensi</h1>
+    <h1 class="text-2xl font-semibold"><i class="fas fa-calendar-check"></i> Rekap Absensi</h1>
 </div>
 
-<div class="card mb-4">
-    <div class="card-body">
+<div class="bg-white shadow-md rounded-lg mb-4">
+    <div class="p-6">
         <form action="{{ route('admin.absensi.rekap') }}" method="GET" class="row g-3">
-            <div class="col-md-4">
-                <label for="bulan" class="form-label">Bulan</label>
-                <select name="bulan" id="bulan" class="form-select">
-                    @for($i = 1; $i <= 12; $i++)
-                        <option value="{{ $i }}" {{ $bulan == $i ? 'selected' : '' }}>
-                            {{ DateTime::createFromFormat('!m', $i)->format('F') }}
-                        </option>
-                    @endfor
-                </select>
-            </div>
-            
-            <div class="col-md-4">
-                <label for="tahun" class="form-label">Tahun</label>
-                <select name="tahun" id="tahun" class="form-select">
-                    @for($i = date('Y') - 5; $i <= date('Y'); $i++)
-                        <option value="{{ $i }}" {{ $tahun == $i ? 'selected' : '' }}>{{ $i }}</option>
-                    @endfor
-                </select>
-            </div>
-            
-            <div class="col-md-4">
-                <label class="form-label">&nbsp;</label>
-                <button type="submit" class="btn btn-primary d-block">
-                    <i class="fas fa-filter"></i> Filter
-                </button>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="bulan" class="block text-sm font-medium text-gray-700">Bulan</label>
+                    <select name="bulan" id="bulan" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                        @for($i = 1; $i <= 12; $i++)
+                            <option value="{{ $i }}" {{ $bulan == $i ? 'selected' : '' }}>
+                                {{ DateTime::createFromFormat('!m', $i)->format('F') }}
+                            </option>
+                        @endfor
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="tahun" class="block text-sm font-medium text-gray-700">Tahun</label>
+                    <select name="tahun" id="tahun" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                        @for($i = date('Y') - 5; $i <= date('Y'); $i++)
+                            <option value="{{ $i }}" {{ $tahun == $i ? 'selected' : '' }}>{{ $i }}</option>
+                        @endfor
+                    </select>
+                </div>
+                
+                <div class="flex items-end">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
+<div class="bg-white shadow-md rounded-lg">
+    <div class="p-6">
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto">
                 <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Nama Karyawan</th>
-                        <th>NIK</th>
-                        <th>Jam Masuk</th>
-                        <th>Jam Pulang</th>
-                        <th>Status</th>
-                        <th>Keterangan</th>
-                        <th>Aksi</th>
+                    <tr class="bg-gray-200">
+                        <th class="px-4 py-2">No</th>
+                        <th class="px-4 py-2">Tanggal</th>
+                        <th class="px-4 py-2">Nama Karyawan</th>
+                        <th class="px-4 py-2">NIK</th>
+                        <th class="px-4 py-2">Jam Masuk</th>
+                        <th class="px-4 py-2">Jam Pulang</th>
+                        <th class="px-4 py-2">Status</th>
+                        <th class="px-4 py-2">Keterangan</th>
+                        <th class="px-4 py-2">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($absensi as $data)
-                    <tr>
-                        <td>{{ $loop->iteration + $absensi->firstItem() - 1 }}</td>
-                        <td>{{ $data->tanggal->format('d/m/Y') }}</td>
-                        <td>{{ $data->karyawan->user->name }}</td>
-                        <td>{{ $data->karyawan->nik }}</td>
-                        <td>{{ $data->jam_masuk ?? '-' }}</td>
-                        <td>{{ $data->jam_pulang ?? '-' }}</td>
-                        <td>
-                            <span class="badge bg-{{ $data->status == 'hadir' ? 'success' : ($data->status == 'izin' ? 'warning' : ($data->status == 'sakit' ? 'info' : 'danger')) }}">
+                    <tr class="border-b">
+                        <td class="px-4 py-2">{{ $loop->iteration + $absensi->firstItem() - 1 }}</td>
+                        <td class="px-4 py-2">{{ $data->tanggal->format('d/m/Y') }}</td>
+                        <td class="px-4 py-2">{{ $data->karyawan->user->name }}</td>
+                        <td class="px-4 py-2">{{ $data->karyawan->nik }}</td>
+                        <td class="px-4 py-2">{{ $data->jam_masuk ?? '-' }}</td>
+                        <td class="px-4 py-2">{{ $data->jam_pulang ?? '-' }}</td>
+                        <td class="px-4 py-2">
+                            <span class="badge bg-{{ $data->status == 'hadir' ? 'green' : ($data->status == 'izin' ? 'yellow' : ($data->status == 'sakit' ? 'blue' : 'red')) }}-500 text-white rounded-full px-3">
                                 {{ ucfirst($data->status) }}
                             </span>
                         </td>
-                        <td>{{ $data->keterangan ?? '-' }}</td>
-                        <td>
-                            <a href="{{ route('admin.absensi.edit', $data) }}" class="btn btn-sm btn-warning" title="Edit">
+                        <td class="px-4 py-2">{{ $data->keterangan ?? '-' }}</td>
+                        <td class="px-4 py-2">
+                            <a href="{{ route('admin.absensi.edit', $data) }}" class="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="text-center">Tidak ada data absensi untuk periode ini</td>
+                        <td colspan="9" class="text-center px-4 py-2">Tidak ada data absensi untuk periode ini</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
         
-        {{ $absensi->appends(['bulan' => $bulan, 'tahun' => $tahun])->links() }}
+        <div class="mt-4">
+            {{ $absensi->appends(['bulan' => $bulan, 'tahun' => $tahun])->links() }}
+        </div>
     </div>
 </div>
 @endsection

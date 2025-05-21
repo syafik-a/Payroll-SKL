@@ -6,97 +6,85 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - Sistem Presensi & Penggajian</title>
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     @stack('styles')
 </head>
-<body>
+<body class="bg-gray-100">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+    <nav class="bg-blue-600 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a class="text-white text-lg font-semibold" href="#">
                 <i class="fas fa-building"></i> Sistem Presensi & Penggajian
             </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="block lg:hidden">
+                <button id="navbar-toggle" class="text-white focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="hidden lg:flex lg:items-center">
                 @auth
-                <ul class="navbar-nav me-auto">
+                <ul class="flex space-x-4">
                     @if(Auth::user()->isAdmin())
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.karyawan.index') }}">Data Karyawan</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.absensi.rekap') }}">Rekap Absensi</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.gaji.index') }}">Data Gaji</a>
-                        </li>
+                        <li><a class="text-white hover:underline" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                        <li><a class="text-white hover:underline" href="{{ route('admin.karyawan.index') }}">Data Karyawan</a></li>
+                        <li><a class="text-white hover:underline" href="{{ route('admin.absensi.rekap') }}">Rekap Absensi</a></li>
+                        <li><a class="text-white hover:underline" href="{{ route('admin.gaji.index') }}">Data Gaji</a></li>
                     @elseif(Auth::user()->isKaryawan())
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('karyawan.dashboard') }}">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('karyawan.absensi.riwayat') }}">Riwayat Absensi</a>
-                        </li>
+                        <li><a class="text-white hover:underline" href="{{ route('karyawan.dashboard') }}">Dashboard</a></li>
+                        <li><a class="text-white hover:underline" href="{{ route('karyawan.absensi.riwayat') }}">Riwayat Absensi</a></li>
                     @endif
                 </ul>
-                
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user"></i> {{ Auth::user()->name }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">
-                                        <i class="fas fa-sign-out-alt"></i> Logout
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                <div class="relative">
+                    <button class="flex items-center text-white focus:outline-none">
+                        <i class="fas fa-user"></i> {{ Auth::user()->name }}
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10 hidden" id="dropdown">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="block px-4 py-2 text-gray-700 hover:bg-gray-200 w-full text-left">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
                 @endauth
             </div>
         </div>
     </nav>
-    
+
     <!-- Content -->
     <main class="py-4">
-        <div class="container">
+        <div class="container mx-auto">
             @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                     {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
             
             @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                     {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
             
             @yield('content')
         </div>
     </main>
-    
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     @stack('scripts')
+    <script>
+        document.getElementById('navbar-toggle').addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown');
+            dropdown.classList.toggle('hidden');
+        });
+        
+        document.querySelectorAll('.flex').forEach(item => {
+            item.addEventListener('click', event => {
+                var dropdown = document.getElementById('dropdown');
+                dropdown.classList.add('hidden');
+            });
+        });
+    </script>
 </body>
 </html>

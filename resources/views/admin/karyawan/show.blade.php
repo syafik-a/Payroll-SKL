@@ -4,134 +4,120 @@
 
 @section('content')
 <div class="mb-4">
-    <h1><i class="fas fa-user"></i> Detail Karyawan</h1>
+    <h1 class="text-2xl font-semibold"><i class="fas fa-user"></i> Detail Karyawan</h1>
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.karyawan.index') }}">Data Karyawan</a></li>
-            <li class="breadcrumb-item active">Detail Karyawan</li>
+        <ol class="list-reset flex text-gray-500">
+            <li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:underline">Dashboard</a></li>
+            <li class="mx-2">/</li>
+            <li><a href="{{ route('admin.karyawan.index') }}" class="text-blue-600 hover:underline">Data Karyawan</a></li>
+            <li class="mx-2">/</li>
+            <li class="font-medium">Detail Karyawan</li>
         </ol>
     </nav>
 </div>
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Informasi Karyawan</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <tr>
-                        <th width="200">Nama Lengkap</th>
-                        <td>{{ $karyawan->user->name }}</td>
-                    </tr>
-                    <tr>
-                        <th>NIK</th>
-                        <td>{{ $karyawan->nik }}</td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td>{{ $karyawan->user->email }}</td>
-                    </tr>
-                    <tr>
-                        <th>No. Telepon</th>
-                        <td>{{ $karyawan->no_telepon ?? '-' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Alamat</th>
-                        <td>{{ $karyawan->alamat ?? '-' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Posisi</th>
-                        <td>{{ $karyawan->posisi }}</td>
-                    </tr>
-                    <tr>
-                        <th>Tanggal Masuk</th>
-                        <td>{{ $karyawan->tanggal_masuk->format('d M Y') }}</td>
-                    </tr>
-                    <tr>
-                        <th>Gaji Pokok</th>
-                        <td>Rp {{ number_format($karyawan->gaji_pokok, 0, ',', '.') }}</td>
-                    </tr>
-                    <tr>
-                        <th>Role</th>
-                        <td>
-                            <span class="badge bg-info">{{ ucfirst($karyawan->user->role) }}</span>
-                        </td>
-                    </tr>
-                </table>
-                
-                <div class="mt-3">
-                    <a href="{{ route('admin.karyawan.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Kembali
-                    </a>
-                    <a href="{{ route('admin.karyawan.edit', $karyawan) }}" class="btn btn-warning">
-                        <i class="fas fa-edit"></i> Edit
-                    </a>
-                </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white shadow-md rounded-lg">
+        <div class="bg-blue-600 text-white p-4 rounded-t-lg">
+            <h5 class="mb-0 text-lg font-bold">Informasi Karyawan</h5>
+        </div>
+        <div class="p-4">
+            <table class="w-full">
+                <tr>
+                    <th class="text-left py-2">Nama Lengkap</th>
+                    <td class="py-2">{{ $karyawan->user->name }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left py-2">NIK</th>
+                    <td class="py-2">{{ $karyawan->nik }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left py-2">Email</th>
+                    <td class="py-2">{{ $karyawan->user->email }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left py-2">No. Telepon</th>
+                    <td class="py-2">{{ $karyawan->no_telepon ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left py-2">Alamat</th>
+                    <td class="py-2">{{ $karyawan->alamat ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left py-2">Posisi</th>
+                    <td class="py-2">{{ $karyawan->posisi }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left py-2">Tanggal Masuk</th>
+                    <td class="py-2">{{ $karyawan->tanggal_masuk->format('d M Y') }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left py-2">Gaji Pokok</th>
+                    <td class="py-2">Rp {{ number_format($karyawan->gaji_pokok, 0, ',', '.') }}</td>
+                </tr>
+            </table>
+            <div class="mt-4 flex gap-2">
+                <a href="{{ route('admin.karyawan.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"><i class="fas fa-arrow-left"></i> Kembali</a>
+                <a href="{{ route('admin.karyawan.edit', $karyawan) }}" class="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700"><i class="fas fa-edit"></i> Edit</a>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">Statistik Absensi Bulan Ini</h5>
-            </div>
-            <div class="card-body">
-                @php
-                    $bulanIni = \App\Models\Absensi::where('karyawan_id', $karyawan->id)
-                        ->whereMonth('tanggal', date('m'))
-                        ->whereYear('tanggal', date('Y'))
-                        ->get();
-                @endphp
-                
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Hadir
-                        <span class="badge bg-success rounded-pill">
-                            {{ $bulanIni->where('status', 'hadir')->count() }}
-                        </span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Izin
-                        <span class="badge bg-warning rounded-pill">
-                            {{ $bulanIni->where('status', 'izin')->count() }}
-                        </span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Sakit
-                        <span class="badge bg-danger rounded-pill">
-                            {{ $bulanIni->where('status', 'sakit')->count() }}
-                        </span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Tanpa Keterangan
-                        <span class="badge bg-dark rounded-pill">
-                            {{ $bulanIni->where('status', 'tanpa keterangan')->count() }}
-                        </span>
-                    </li>
-                </ul>
-            </div>
+
+    <div class="bg-white shadow-md rounded-lg">
+        <div class="bg-blue-600 text-white p-4 rounded-t-lg">
+            <h5 class="mb-0 text-lg font-bold">Statistik Absensi Bulan Ini</h5>
+        </div>
+        <div class="p-4">
+            @php
+                $bulanIni = \App\Models\Absensi::where('karyawan_id', $karyawan->id)
+                    ->whereMonth('tanggal', date('m'))
+                    ->whereYear('tanggal', date('Y'))
+                    ->get();
+            @endphp
+
+            <ul class="list-disc pl-5">
+                <li class="flex justify-between">
+                    Hadir
+                    <span class="bg-green-500 text-white rounded-full px-3">
+                        {{ $bulanIni->where('status', 'hadir')->count() }}
+                    </span>
+                </li>
+                <li class="flex justify-between">
+                    Izin
+                    <span class="bg-yellow-500 text-white rounded-full px-3">
+                        {{ $bulanIni->where('status', 'izin')->count() }}
+                    </span>
+                </li>
+                <li class="flex justify-between">
+                    Sakit
+                    <span class="bg-red-500 text-white rounded-full px-3">
+                        {{ $bulanIni->where('status', 'sakit')->count() }}
+                    </span>
+                </li>
+                <li class="flex justify-between">
+                    Tanpa Keterangan
+                    <span class="bg-gray-800 text-white rounded-full px-3">
+                        {{ $bulanIni->where('status', 'tanpa keterangan')->count() }}
+                    </span>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
-
-<div class="card mt-4">
-    <div class="card-header bg-success text-white">
-        <h5 class="mb-0">Riwayat Absensi Terakhir</h5>
+<div class="bg-white shadow-md rounded-lg mt-4">
+    <div class="bg-green-600 text-white p-4 rounded-t-lg">
+        <h5 class="mb-0 text-lg font-bold">Riwayat Absensi Terakhir</h5>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
+    <div class="p-4">
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto">
                 <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Jam Masuk</th>
-                        <th>Jam Pulang</th>
-                        <th>Status</th>
-                        <th>Keterangan</th>
+                    <tr class="bg-gray-200">
+                        <th class="px-4 py-2">Tanggal</th>
+                        <th class="px-4 py-2">Jam Masuk</th>
+                        <th class="px-4 py-2">Jam Pulang</th>
+                        <th class="px-4 py-2">Status</th>
+                        <th class="px-4 py-2">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -142,20 +128,20 @@
                             ->get();
                     @endphp
                     @forelse($riwayatAbsensi as $absensi)
-                    <tr>
-                        <td>{{ $absensi->tanggal->format('d/m/Y') }}</td>
-                        <td>{{ $absensi->jam_masuk ?? '-' }}</td>
-                        <td>{{ $absensi->jam_pulang ?? '-' }}</td>
-                        <td>
-                            <span class="badge bg-{{ $absensi->status == 'hadir' ? 'success' : ($absensi->status == 'izin' ? 'warning' : 'danger') }}">
+                    <tr class="border-b">
+                        <td class="px-4 py-2">{{ $absensi->tanggal->format('d/m/Y') }}</td>
+                        <td class="px-4 py-2">{{ $absensi->jam_masuk ?? '-' }}</td>
+                        <td class="px-4 py-2">{{ $absensi->jam_pulang ?? '-' }}</td>
+                        <td class="px-4 py-2">
+                            <span class="bg-{{ $absensi->status == 'hadir' ? 'green' : ($absensi->status == 'izin' ? 'yellow' : 'red') }}-500 text-white rounded-full px-3">
                                 {{ ucfirst($absensi->status) }}
                             </span>
                         </td>
-                        <td>{{ $absensi->keterangan ?? '-' }}</td>
+                        <td class="px-4 py-2">{{ $absensi->keterangan ?? '-' }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center">Belum ada riwayat absensi</td>
+                        <td colspan="5" class="text-center px-4 py-2">Belum ada riwayat absensi</td>
                     </tr>
                     @endforelse
                 </tbody>

@@ -3,43 +3,49 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white text-center">
-                <h4><i class="fas fa-sign-in-alt"></i> Login</h4>
+<div class="flex justify-center">
+    <div class="w-full max-w-sm">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="bg-blue-600 text-white text-center p-4">
+                <h4 class="text-lg font-semibold"><i class="fas fa-sign-in-alt"></i> Login</h4>
             </div>
-            <div class="card-body">
+            <div class="p-6">
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                   id="email" name="email" value="{{ old('email') }}" required autofocus>
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <div class="relative">
+                            <input type="email" 
+                                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200 @error('email') border-red-500 @enderror" 
+                                   id="email" 
+                                   name="email" 
+                                   value="{{ old('email') }}" 
+                                   required 
+                                   autofocus>
+                            @error('email')
+                                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
                     
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                   id="password" name="password" required>
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <div class="relative">
+                            <input type="password" 
+                                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200 @error('password') border-red-500 @enderror" 
+                                   id="password" 
+                                   name="password" 
+                                   required>
+                            @error('password')
+                                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
                     
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-sign-in-alt"></i> Login
+                    <div>
+                        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Login
                         </button>
                     </div>
                 </form>
