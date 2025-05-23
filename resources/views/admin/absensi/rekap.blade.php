@@ -9,8 +9,8 @@
 
 <div class="bg-white shadow-md rounded-lg mb-4">
     <div class="p-6">
-        <form action="{{ route('admin.absensi.rekap') }}" method="GET" class="row g-3">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <form action="{{ route('admin.absensi.rekap') }}" method="GET">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
                     <label for="bulan" class="block text-sm font-medium text-gray-700">Bulan</label>
                     <select name="bulan" id="bulan" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
@@ -21,7 +21,6 @@
                         @endfor
                     </select>
                 </div>
-                
                 <div>
                     <label for="tahun" class="block text-sm font-medium text-gray-700">Tahun</label>
                     <select name="tahun" id="tahun" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
@@ -30,7 +29,6 @@
                         @endfor
                     </select>
                 </div>
-                
                 <div class="flex items-end">
                     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full">
                         <i class="fas fa-filter"></i> Filter
@@ -68,13 +66,13 @@
                         <td class="px-4 py-2">{{ $data->jam_masuk ?? '-' }}</td>
                         <td class="px-4 py-2">{{ $data->jam_pulang ?? '-' }}</td>
                         <td class="px-4 py-2">
-                            <span class="badge bg-{{ $data->status == 'hadir' ? 'green' : ($data->status == 'izin' ? 'yellow' : ($data->status == 'sakit' ? 'blue' : 'red')) }}-500 text-white rounded-full px-3">
+                            <span class="bg-{{ $data->status == 'hadir' ? 'green' : ($data->status == 'izin' ? 'yellow' : 'red') }}-500 text-white rounded px-2 py-1">
                                 {{ ucfirst($data->status) }}
                             </span>
                         </td>
                         <td class="px-4 py-2">{{ $data->keterangan ?? '-' }}</td>
                         <td class="px-4 py-2">
-                            <a href="{{ route('admin.absensi.edit', $data) }}" class="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600" title="Edit">
+                            <a href="{{ route('admin.absensi.edit', $data) }}" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>

@@ -6,7 +6,7 @@
 <div class="mb-4">
     <h1 class="text-2xl font-semibold"><i class="fas fa-calendar-edit"></i> Edit Absensi</h1>
     <nav aria-label="breadcrumb">
-        <ol class="list-reset flex text-gray-500">
+        <ol class="flex text-gray-500">
             <li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:underline">Dashboard</a></li>
             <li class="mx-2">/</li>
             <li><a href="{{ route('admin.absensi.rekap') }}" class="text-blue-600 hover:underline">Rekap Absensi</a></li>
@@ -38,21 +38,21 @@
                     <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal <span class="text-red-500">*</span></label>
                     <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', $absensi->tanggal->format('Y-m-d')) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md @error('tanggal') border-red-500 @enderror" required>
                     @error('tanggal')
-                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                     @enderror
                 </div>
                 <div>
                     <label for="jam_masuk" class="block text-sm font-medium text-gray-700">Jam Masuk</label>
                     <input type="time" id="jam_masuk" name="jam_masuk" value="{{ old('jam_masuk', $absensi->jam_masuk) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md @error('jam_masuk') border-red-500 @enderror">
                     @error('jam_masuk')
-                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                     @enderror
                 </div>
                 <div>
                     <label for="jam_pulang" class="block text-sm font-medium text-gray-700">Jam Pulang</label>
                     <input type="time" id="jam_pulang" name="jam_pulang" value="{{ old('jam_pulang', $absensi->jam_pulang) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md @error('jam_pulang') border-red-500 @enderror">
                     @error('jam_pulang')
-                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
@@ -66,7 +66,7 @@
                     <option value="tanpa keterangan" {{ old('status', $absensi->status) == 'tanpa keterangan' ? 'selected' : '' }}>Tanpa Keterangan</option>
                 </select>
                 @error('status')
-                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
             </div>
 
@@ -74,7 +74,7 @@
                 <label for="keterangan" class="block text-sm font-medium text-gray-700">Keterangan</label>
                 <textarea id="keterangan" name="keterangan" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md @error('keterangan') border-red-500 @enderror">{{ old('keterangan', $absensi->keterangan) }}</textarea>
                 @error('keterangan')
-                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
             </div>
 
